@@ -1,247 +1,135 @@
 package chap9;
 
-/**
- * ClassName:Contact
- * Package:chap9
- * Author:@Wyh
- */
-
 import java.text.Collator;
-
-import java.util.Arrays;
-
+import java.util.*;
 import java.util.regex.Pattern;
 
-public class Contact {
+import chap9.exception.EmailException;
+import chap9.exception.GenderException;
+import chap9.exception.EmailException;
 
+
+public class Contact implements Comparable<Contact>{
     private String name;
-
     private String gender;
-
     private String email;
+    private Set<String> phones;
 
-    private String[] phones;
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        if(obj != null && obj instanceof Contact) {
+            return this.getName().equals(((Contact)obj).getName());
+        }
+        return false;
+    }
 
     public int compareTo(Contact o) {
-
         Collator instance = Collator.getInstance(java.util.Locale.CHINA);
-
         return instance.compare(this.getName(), o.getName());
-
     }
 
-    public void mergeContact(Contact c) {
-
-//名字相同 性别 邮箱 用c的信息替代当前对象
-
-        if(this.getName().equals(c.getEmail())) {
-
-            if(!c.getGender().equals(""))
-
-                this.setGender(c.getGender());
-
-            if(!c.getEmail().contentEquals(""))
-
-                this.setEmail(c.getEmail());
-
-//对电话复制并去重
-
-            String newPhones[] = new String[c.getPhones().length];
-
-            int count = 0;
-
-            for(int i = 0; i < c.getPhones().length; i++) {
-
-                boolean isMerged = true;
-
-                for(int j = 0; j < this.getPhones().length; j++) {
-
-                    if(c.getPhones()[i].equals(this.getPhones()[j])) {
-
-                        isMerged = false;
-
-                        break;
-
-                    }
-
-                }
-
-                if(isMerged)
-
-                    newPhones[count++] = c.getPhones()[i];
-
-            }
-
-            int position = phones.length;
-
-            phones = Arrays.copyOf(phones, phones.length+count);
-
-            System.arraycopy(newPhones,0,phones,position,count);
-
-        }
-
-    }
-
-    public boolean update(Contact c) {
-
+    public void mergeContact(Contact c) throws GenderException, EmailException {
+        //名字相同 性别 邮箱 用c的信息替代当前对象
         if(this.getName().equals(c.getName())) {
-
-            if(c.getEmail()!= null && !c.getEmail().equals(""))
-
-                this.setEmail(c.getEmail());
-
-            if(c.getGender()!=null && !c.getGender().equals(""))
-
+            if(!c.getGender().equals(""))
                 this.setGender(c.getGender());
+            if(!c.getEmail().equals(""))
+                this.setEmail(c.getEmail());
+            //对电话复制并去重
+            Set<String> srcPhones = this.getPhones();
+            srcPhones.addAll(c.getPhones());
+        }
+    }
 
-            if(c.getPhones()!=null && c.getPhones().length != 0)
-
+    public boolean update(Contact c) throws Exception {
+        if(this.getName().equals(c.getName())) {
+            if(c.getEmail()!=null && !c.getEmail().equals(""))
+                this.setEmail(c.getEmail());
+            if(c.getGender()!=null && !c.getGender().equals(""))
+                this.setGender(c.getGender());
+            if(c.getPhones()!=null && c.getPhones().size() != 0)
                 this.setPhones(c.getPhones());
-
             return true;
-
         }else
-
             return false;
-
     }
 
     public String getGender() {
-
         return gender;
-
     }
 
     public void setGender(String gender) {
-
-        if(gender == null || gender.equals("") || gender.contentEquals("男") || gender.contentEquals("女"))
+        if(gender == null || gender.equals("") || gender.equals("男") || gender.contentEquals("女"))
 
             this.gender = gender;
-
         else
-
-            System.out.println("gender exception.");
-
+            System.out.println("exception.");
     }
 
     public String getEmail() {
-
         return email;
-
     }
 
     public void setEmail(String email) {
-
-        String regex = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
-
-        if(email == null || email.contentEquals("") || Pattern.matches(regex, email))
-
+        String regex = "^[a-zA-Z0-9_-]+@[a-zA-z0-9_-]+[a-zA-Z0-9_-]+$";
+        if(email == null || email.equals("") || Pattern.matches(regex, email))
             this.email = email;
-
         else
-
-            System.out.println("email exception.");
-
+            System.out.println("exception.");
     }
 
-    public String[] getPhones() {
-
+    public Set<String> getPhones() {
         return phones;
-
     }
 
-    public void setPhones(String[] phones) {
-
+    public void setPhones(Set<String> phones) throws Exception {
         String telReg = "^(0[1-9]\\d{1,2}\\-)?\\d{7,8}$";
-
         String phoneReg = "^1[35789][0-9]{9}$";
-
-        if(phones == null || phones.length == 0) {
-
-            System.out.println("phone exception.");
-
-            return;
-
+        if(phones == null || phones.size() == 0) {
+            System.out.println("exception.");
         }
-
-        boolean result = true;
-
-        for(String phone: phones) {
-
-            if(phone != null && phone.equals("")
-
-                    || !(Pattern.matches(telReg,phone) || Pattern.matches(phoneReg, phone))){
-
-                result = false;
-
-                break;
-
+        //boolean result = true;
+        for(String phone:phones) {
+            if(phone == null || phone.equals("") || !(Pattern.matches(telReg, phone) || Pattern.matches(phoneReg, phone))) {
+                throw new Exception();
             }
-
         }
-
-        if(result)
-
-            this.phones = phones;
-
-        else
-
-            System.out.println("phone exception.");
-
+        this.phones = phones;
     }
 
     public String getName() {
-
         return name;
-
     }
 
     public Contact() {
-
     }
 
-    public Contact(String name, String gender, String email, String[] phones) {
-
+    public Contact(String name, String gender, String email, Set<String> phones) throws Exception {
         setName(name);
-
         setGender(gender);
-
         setEmail(email);
-
         setPhones(phones);
-
     }
 
-    public Contact(String name, String[] phones) {
-
+    public Contact(String name, Set<String> phones) throws Exception {
         this(name, "", "", phones);
-
     }
+
 
     public void setName(String name) {
-
         if (name == null || name.equals(""))
-
             return;
-
         this.name = name;
-
     }
 
     public void display() {
-
         System.out.println("姓名：" + getName() + "\t性别：" + getGender() + "\te-mail:" + getEmail());
-
-        System.out.print("联系方式：");
-
-        for (int i = 0; i < phones.length; i++) {
-
-            System.out.print(phones[i] + "\t");
-
+        System.out.print("电话：\t");
+        for (String Phones:this.getPhones()) {
+            System.out.print(phones + "\t");
         }
-
         System.out.println();
-
     }
 
 }

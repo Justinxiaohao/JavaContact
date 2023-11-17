@@ -1,44 +1,65 @@
 package chap9;
 
-/**
- * ClassName:PhoneBookTest
- * Package:chap9
- * Author:@Wyh
- */
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import chap9.Company;
+import chap9.Contact;
+import chap9.Family;
+import chap9.Partner;
+import chap9.PhoneBook;
+
 public class PhoneBookTest {
-    public static void main(String[] args) throws ParseException  {
-        Contact c = new Contact("王小明", new String[] { "13602344578", "13506334789", "010-34567913" });
+    public static void main(String[] args) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date birthday = sdf.parse("2001-09-12");
-        Family f = new Family("王高山", "男","wh@163.com",new String[] { "13602341234", "13506332356", "010-34564568" },birthday,"山东烟台");
-
-        Partner p = new Partner("李阳", "男","zym@163.com",new String[] { "13600041234", "13501232356" },
-                "工程师", new Company("烟台大学", "烟台莱山区", "0535-6023458", "0535-6026457"));
-
-        PhoneBook book = new PhoneBook(new Contact[] {c,f});
-
-        System.out.println("通讯录");
+        PhoneBook book = new PhoneBook();
+        Set<String> s1 = new HashSet<String>();
+        s1.add("13602344578");
+        s1.add("13506334789");
+        s1.add("010-34567913");
+        book.add(new Contact("曾呆呆", s1));
+        Set<String> s2 = new HashSet<String>();
+        s2.add("13302344534");
+        s2.add("13206334789");
+        s2.add("010-34544913");
+        book.add(new Family("吴宇豪", "男", "qqq@163.com", s2, sdf.parse("1966-4-25"), "山东烟台莱山区"));
+        Set<String> s3 = new HashSet<String>();
+        s3.add("13612344234");
+        s3.add("13507894555");
+        s3.add("0531-3456993");
+        book.add(new Partner("呆瓜曾", "男", "www@163.com", s3, "经理",
+                new Company("月牙弯弯", "中国北京", "010-12345678", "010-23456789")));
+        Set<String> s4 = new HashSet<String>();
+        s4.add("13612344234");
+        s4.add("13507894555");
+        s4.add("0531-3451699");
+        book.add(new Contact("二比曾", s4));
+        Set<String> s5 = new HashSet<String>();
+        s5.add("13612314234");
+        s5.add("13507896555");
+        s5.add("0532-3475699");
+        book.add(new Contact("笨蛋曾", s5));
+        System.out.println("按照姓名拼音升序排列的通讯录：");
         book.display();
         System.out.println("*******");
-        System.out.println("添加");
-        book.add(p);
-        Family ff = new Family("王高山", "", "", new String[] {"13602341234","13323451234", "010-34564568"},birthday,"山东烟台");
-        book.add(ff);
-        book.display();
-        System.out.println("显示所有的王姓联系人");
-        for (Contact cc : book.findContactsByName("王"))
-            cc.display();
-        book.delete(new Contact("李阳", new String[] { "13600041234", "13501232356" }));
+        System.out.println("张姓联络人：");
+        for (Contact c : book.findContactsByName("张"))
+            c.display();
+        Set<String> s6 = new HashSet<String>();
+        s6.add("13612344234");
+        s6.add("13507894555");
+        s6.add("0531-3456993");
+        book.delete(new Contact("张流星", s6));
         System.out.println("*******");
-        System.out.println("删除李阳后");
+        System.out.println("删除张流星之后的通讯录：");
         book.display();
-		book.updateContact(new Family("王高山", "男", "123@163.com",
-				new String[] { "13612345678"},sdf.parse("1971-4-25"), "山东烟台"));
-		System.out.println("*******");
-		System.out.println("修改操作之后");
-		book.display();
+        Set<String> s7 = new HashSet<String>();
+        s7.add("13602344578");
+        s7.add("13506334789");
+        s7.add("010-34567913");
+        book.updateContact(new Family("于天明", "男", "123@163.com", s7, sdf.parse("1971-4-25"), "山东烟台芝罘区"));
+        System.out.println("*******");
+        System.out.println("修改于天明之后的通讯录：");
+        book.display();
     }
 }
