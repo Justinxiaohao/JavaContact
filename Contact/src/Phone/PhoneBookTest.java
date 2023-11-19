@@ -1,13 +1,9 @@
-package chap9;
+package Phone;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import chap9.Company;
-import chap9.Contact;
-import chap9.Family;
-import chap9.Partner;
-import chap9.PhoneBook;
+import Phone.Company;
 
 public class PhoneBookTest {
     public static void main(String[] args) throws Exception {
@@ -17,28 +13,28 @@ public class PhoneBookTest {
         s1.add("13602344578");
         s1.add("13506334789");
         s1.add("010-34567913");
-        book.add(new Contact("曾呆呆", s1));
+        book.add(new Contact("王新明", s1));
         Set<String> s2 = new HashSet<String>();
         s2.add("13302344534");
         s2.add("13206334789");
         s2.add("010-34544913");
-        book.add(new Family("吴宇豪", "男", "qqq@163.com", s2, sdf.parse("1966-4-25"), "山东烟台莱山区"));
+        book.add(new Family("于天明", "男", "qqq@163.com", s2, sdf.parse("1966-4-25"), "山东烟台莱山区"));
         Set<String> s3 = new HashSet<String>();
         s3.add("13612344234");
         s3.add("13507894555");
         s3.add("0531-3456993");
-        book.add(new Partner("呆瓜曾", "男", "www@163.com", s3, "经理",
-                new Company("月牙弯弯", "中国北京", "010-12345678", "010-23456789")));
+        book.add(new Partner("张流星", "男", "www@163.com", s3, "经理",
+                new Company("伪腾讯QQ", "中国北京", "010-12345678", "010-23456789")));
         Set<String> s4 = new HashSet<String>();
         s4.add("13612344234");
         s4.add("13507894555");
         s4.add("0531-3451699");
-        book.add(new Contact("二比曾", s4));
+        book.add(new Contact("Tommy", s4));
         Set<String> s5 = new HashSet<String>();
         s5.add("13612314234");
         s5.add("13507896555");
         s5.add("0532-3475699");
-        book.add(new Contact("笨蛋曾", s5));
+        book.add(new Contact("Jackson", s5));
         System.out.println("按照姓名拼音升序排列的通讯录：");
         book.display();
         System.out.println("*******");

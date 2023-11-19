@@ -1,7 +1,7 @@
-package chap9.exception;
+package Phone.exception;
 
 public class PhoneException extends Exception {
     public PhoneException() {
-        super("电话号码格式错误");
+    	super("电话号码格式错误");
     }
 }

@@ -1,7 +1,7 @@
-package chap9.exception;
+package Phone.exception;
 
 public class EmailException extends Exception {
     public EmailException() {
-        super("电子邮箱格式错误");
+    	super("电子邮箱格式错误");
     }
 }
